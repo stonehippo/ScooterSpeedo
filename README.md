@@ -5,7 +5,7 @@ The tyke mentioned the other day that she'd like to know how fast she's going on
 
 ## The microcontroller
 
-I happen to have a few Arduinos laying around<a href="#fn1"><sup>1</sup></a>, so I'm turning to those. For this project, I'm using an Arduino Pro Mini 5v. I chose the smallest Arduino-compatible I've got onhand to keep the size and weight down on the scooter-mounted components.
+I happen to have a few Arduinos laying around<a href="#fn1"><sup>1</sup></a>, so I'm turning to those. For this project, I'm using an Arduino Pro Mini 5v. I chose the smallest Arduino-compatible I've got on hand to keep the size and weight down on the scooter-mounted components.
 
 ## The accelerometer
 
