@@ -17,4 +17,4 @@ I'm using a standard 16X2 LCD display for showing information from the sensors. 
 
 -----
 
-1. <a name="fn1"></a> It's more like I've grabbed a bunch of Arduinos and clones in various form factors that past couple of Arduino days! And now I need to start integrating them into projects. Like this one. :)
+1. <a name="fn1"></a> It's more like I've grabbed a bunch of Arduinos and clones in various form factors the past couple of Arduino days! And now I need to start integrating them into projects. Like this one. :)
