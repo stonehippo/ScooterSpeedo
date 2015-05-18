@@ -5,4 +5,4 @@ The tyke mentioned the other day that she'd like to know how fast she's going on
 
 ## The accelerometer
 
-I'm using an [Adafruit MMA8451 Accelerometer Breakout](http://www.adafruit.com/product/2019), a nifty, inexpensive little board that got +/-2/4/8G readings and uses I2C to communicate. This board is easy to use, thanks to Adafruit sensor library, and is simple to wire up, since it uses two-wire I2C protocol. Just hook up +5v, ground, connect SDA to pin A4, SCL to pin A5, and you're all set.
+I'm using an [Adafruit MMA8451 Accelerometer Breakout](http://www.adafruit.com/product/2019), a nifty, inexpensive little board that has +/-2/4/8G readings and uses I2C to communicate. This board is easy to use, thanks to Adafruit sensor library, and is simple to wire up, since it uses two-wire I2C protocol. Just hook up +5v, ground, connect SDA to pin A4, SCL to pin A5, and you're all set.
