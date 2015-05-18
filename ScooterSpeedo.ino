@@ -1,5 +1,5 @@
 /*
-  A wheel encoder speedometer and accelerometer for Zoe's scooter
+  A wheel encoder speedometer and accelerometer for the tyke's scooter
 */
 
 #include <LiquidCrystal.h>
@@ -29,9 +29,9 @@ void setup() {
   pinMode(LCD_BACKLIGHT, OUTPUT);
   analogWrite(LCD_BACKLIGHT, 40);
   analogWrite(LCD_CONTRAST, 120);
-  
+
   lcd.begin(16,2);
-  
+
   if (! mma.begin()) {
     lcd.print("No accel start");
     while (1);
@@ -39,16 +39,16 @@ void setup() {
   mma.setRange(MMA8451_RANGE_8_G);
   lcd.print("Ready!");
 }
-  
+
 void loop() {
   mma.read();
-  
-  /* Get a new sensor event */ 
-  sensors_event_t event; 
+
+  /* Get a new sensor event */
+  sensors_event_t event;
   mma.getEvent(&event);
 
   lcd.clear();
-  
+
   lcd.print("Current Speed");
   lcd.setCursor(0,1);
   lcd.print("Y:");
@@ -56,4 +56,3 @@ void loop() {
   lcd.print(" m/s^2");
   delay(250);
 }
-
