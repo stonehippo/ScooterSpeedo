@@ -29,6 +29,10 @@ double mph = 0.0;
 const int MAX_RECORD_KPH_ADDRESS = 0;
 double maxRecordKph = 0.0;
 
+// Read the max recorded forward acceleration, too
+const int MAX_RECORD_ACCEL_Y_ADDRESS = 8;
+double maxRecordAccelY = 0.0;
+
 // Hall effect sensor read pin, make it an interrupt pin so we catch all revolutions
 const byte HALL_SENSOR = 2;
 boolean isHallSensorTriggered = false;
@@ -83,12 +87,25 @@ void setup() {
   if (isnan(maxRecordKph)) {
     maxRecordKph = 0.0;
   }
+  
+  EEPROM.get(MAX_RECORD_ACCEL_Y_ADDRESS, maxRecordAccelY);
+  if (isnan(maxRecordAccelY)) {
+    maxRecordAccelY = 0.0;
+  }
 
   lcd.print("Max kph: ");
   lcd.print(maxRecordKph);
   lcd.setCursor(0,1);
   lcd.print("Max mph: ");
   lcd.print(kphToMph(maxRecordKph));
+  
+  delay(2000);
+  lcd.clear();
+  
+  lcd.print("Max Accel Y: ");
+  lcd.setCursor(0,1);
+  lcd.print(maxRecordAccelY);
+  lcd.print(" m/s^2");
   
   delay(2000);
   lcd.clear();
@@ -115,6 +132,13 @@ void loop() {
   lcd.print("AccY:");
   lcd.print(event.acceleration.y);
   lcd.print(" m/s^2");
+
+  if (event.acceleration.y > maxRecordAccelY) {
+    maxRecordAccelY = event.acceleration.y;
+    noInterrupts();
+    setMaxAccelY(maxRecordAccelY);
+    interrupts();
+  }
   
   // using blocking delay debounces the accelerometer and gives the display time to refresh
   delay(250);
@@ -162,4 +186,8 @@ double kphToMph(double k) {
 
 void setMaxSpeed(double k) {
   EEPROM.put(MAX_RECORD_KPH_ADDRESS, k); 
+}
+
+void setMaxAccelY(double a) {
+  EEPROM.put(MAX_RECORD_ACCEL_Y_ADDRESS, a);  
 }
