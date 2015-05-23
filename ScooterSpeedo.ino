@@ -13,6 +13,7 @@
 */
 
 #include <math.h>
+#include <EEPROM.h>
 #include <LiquidCrystal.h>
 #include <Wire.h>
 #include <Adafruit_MMA8451.h>
@@ -23,6 +24,10 @@ const double WHEEL_RADIUS = 6.0; // in cm
 const double WHEEL_CIRCUMFERENCE = 2 * WHEEL_RADIUS * PI;
 double kph = 0.0;
 double mph = 0.0;
+
+// Read the max recorded KPH and store it in memory
+const int MAX_RECORD_KPH_ADDRESS = 0;
+double maxRecordKph = 0.0;
 
 // Hall effect sensor read pin, make it an interrupt pin so we catch all revolutions
 const byte HALL_SENSOR = 2;
@@ -73,6 +78,20 @@ void setup() {
 
   delay(2000);
   lcd.clear();
+  
+  EEPROM.get(MAX_RECORD_KPH_ADDRESS, maxRecordKph);
+  if (isnan(maxRecordKph)) {
+    maxRecordKph = 0.0;
+  }
+
+  lcd.print("Max kph: ");
+  lcd.print(maxRecordKph);
+  lcd.setCursor(0,1);
+  lcd.print("Max mph: ");
+  lcd.print(kphToMph(maxRecordKph));
+  
+  delay(2000);
+  lcd.clear();
 }
 
 void loop() {
@@ -118,9 +137,29 @@ double calculateKPH() {
   if (isnan(cmps)) {
     cmps = 0.0; 
   }
-  return cmps/10000.0 * 360.0;
+  double k = cmps/10000.0 * 360.0;
+  if (k > maxRecordKph) {
+    noInterrupts();
+    maxRecordKph = k;
+    lcd.print("New Max!");
+    lcd.setCursor(0,1);
+    lcd.print(k);
+    lcd.print("kph");
+    setMaxSpeed(k);
+    interrupts();
+    delay(1000);
+  }
+  return k;
 }
 
 double calculateMPH() {
-   return kph * 1.6093;
+   return kphToMph(kph);
+}
+
+double kphToMph(double k) {
+  return k * 1.6093;
+};
+
+void setMaxSpeed(double k) {
+  EEPROM.put(MAX_RECORD_KPH_ADDRESS, k); 
 }
