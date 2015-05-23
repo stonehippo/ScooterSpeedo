@@ -1,5 +1,5 @@
 # ScooterSpeedo
-A wheel encoder &amp; accelerometer speedometer for the tyke's scooter.
+An accelerometer &amp; speedometer for the tyke's scooter.
 
 The tyke mentioned the other day that she'd like to know how fast she's going on her scooter. It occurred to me that I've got all of the parts laying around to make a kick-ass speedo for her, with some cool acceleration stuff built in.
 
