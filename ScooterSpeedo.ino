@@ -165,13 +165,8 @@ double calculateKPH() {
   if (k > maxRecordKph) {
     noInterrupts();
     maxRecordKph = k;
-    lcd.print("New Max!");
-    lcd.setCursor(0,1);
-    lcd.print(k);
-    lcd.print("kph");
-    setMaxSpeed(k);
+    setMaxSpeed(maxRecordKph);
     interrupts();
-    delay(1000);
   }
   return k;
 }
