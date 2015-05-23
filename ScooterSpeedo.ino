@@ -12,23 +12,24 @@
   
 */
 
+#include <math.h>
 #include <LiquidCrystal.h>
 #include <Wire.h>
 #include <Adafruit_MMA8451.h>
 #include <Adafruit_Sensor.h>
 
 // Scooter constants
-const float WHEEL_RADIUS = 6.0; // in cm
-const float WHEEL_CIRCUMFERENCE = 2 * WHEEL_RADIUS * PI;
+const double WHEEL_RADIUS = 6.0; // in cm
+const double WHEEL_CIRCUMFERENCE = 2 * WHEEL_RADIUS * PI;
 double kph = 0.0;
 double mph = 0.0;
 
 // Hall effect sensor read pin, make it an interrupt pin so we catch all revolutions
 const byte HALL_SENSOR = 2;
 boolean isHallSensorTriggered = false;
-int tickCount = 0;
-int currentMillis = 0;
-int millisSinceLastTick = 0;
+double tickCount = 0.0;
+double currentMillis = 0.0;
+double millisSinceLastTick = 0.0;
 
 // 16x2 LCD display pins
 const byte LCD_BACKLIGHT = 5;
@@ -48,7 +49,10 @@ Adafruit_MMA8451 mma = Adafruit_MMA8451();
 
 void setup() {
   Serial.begin(115200);
-  Serial.println(WHEEL_CIRCUMFERENCE);
+  
+  Serial.print("Set for wheel circumference: ");
+  Serial.print(WHEEL_CIRCUMFERENCE);
+  Serial.println("cm");
   
   pinMode(HALL_SENSOR, INPUT_PULLUP);
   attachInterrupt(0,triggerCount, FALLING);
@@ -100,7 +104,7 @@ void loop() {
 
 // ******************* INTERRUPT EVENTS ******************* 
 void triggerCount() {
-  tickCount = tickCount + 1;
+  tickCount = tickCount + 1.0;
   millisSinceLastTick = millis();
 }
 
@@ -110,9 +114,12 @@ double calculateKPH() {
   // How many CM per second we've traveled, based on wheel circumference and number of wheel turns since last check
   double cmps =  (1000/(millisSinceLastTick - currentMillis)) * WHEEL_CIRCUMFERENCE * tickCount;
   // reset counts
-  tickCount = 0;
+  tickCount = 0.0;
   currentMillis = millisSinceLastTick;
-  return cmps/10000 *360;
+  if (isnan(cmps)) {
+    cmps = 0.0; 
+  }
+  return cmps/10000.0 * 360.0;
 }
 
 double calculateMPH() {
