@@ -17,10 +17,16 @@
 #include <Adafruit_MMA8451.h>
 #include <Adafruit_Sensor.h>
 
+// Scooter constants
+const float WHEEL_RADIUS = 6.0; // in cm
+const float WHEEL_CIRCUMFERENCE = 2 * WHEEL_RADIUS * PI;
+double kph = 0.0;
+
 // Hall effect sensor read pin, make it an interrupt pin so we catch all revolutions
 const byte HALL_SENSOR = 2;
 boolean isHallSensorTriggered = false;
 int tickCount = 0;
+int currentMillis = 0;
 int millisSinceLastTick = 0;
 
 // 16x2 LCD display pins
@@ -40,6 +46,9 @@ LiquidCrystal lcd(13, 12, 8, 9, 10, 11);
 Adafruit_MMA8451 mma = Adafruit_MMA8451();
 
 void setup() {
+  Serial.begin(115200);
+  Serial.println(WHEEL_CIRCUMFERENCE);
+  
   pinMode(HALL_SENSOR, INPUT_PULLUP);
   attachInterrupt(0,triggerCount, FALLING);
   
@@ -70,15 +79,18 @@ void loop() {
   mma.getEvent(&event);
   
   lcd.clear();
-
-  lcd.print("Revolutions: ");
   
-  lcd.print(tickCount); 
+  kph = calculateKPH();
+  
+  lcd.print("Spd: ");
+  lcd.print(kph);
+  lcd.print("kph");
   
   lcd.setCursor(0,1);
   lcd.print("AccY:");
   lcd.print(event.acceleration.y);
   lcd.print(" m/s^2");
+  
   // using blocking delay debounces the accelerometer and gives the display time to refresh
   delay(250);
 }
@@ -89,3 +101,13 @@ void triggerCount() {
   millisSinceLastTick = millis();
 }
 
+// ******************* INTERRUPT EVENTS *******************
+
+double calculateKPH() {
+  // How many CM per second we've traveled, based on wheel circumference and number of wheel turns since last check
+  double cmps =  (1000/(millisSinceLastTick - currentMillis)) * WHEEL_CIRCUMFERENCE * tickCount;
+  // reset counts
+  tickCount = 0;
+  currentMillis = millisSinceLastTick;
+  return cmps/10000 *360;
+}
