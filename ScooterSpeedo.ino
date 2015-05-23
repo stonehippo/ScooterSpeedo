@@ -189,7 +189,7 @@ void setMaxAccelY(double a) {
   EEPROM.put(MAX_RECORD_ACCEL_Y_ADDRESS, a);  
 }
 
-void resetRecords(() {
+void resetRecords() {
   EEPROM.put(MAX_RECORD_KPH_ADDRESS, 0.0);
   EEPROM.put(MAX_RECORD_ACCEL_Y_ADDRESS, 0.0);  
 }
