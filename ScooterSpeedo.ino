@@ -21,6 +21,7 @@
 const float WHEEL_RADIUS = 6.0; // in cm
 const float WHEEL_CIRCUMFERENCE = 2 * WHEEL_RADIUS * PI;
 double kph = 0.0;
+double mph = 0.0;
 
 // Hall effect sensor read pin, make it an interrupt pin so we catch all revolutions
 const byte HALL_SENSOR = 2;
@@ -81,10 +82,12 @@ void loop() {
   lcd.clear();
   
   kph = calculateKPH();
+  mph = calculateMPH();
   
-  lcd.print("Spd: ");
   lcd.print(kph);
-  lcd.print("kph");
+  lcd.print("kph/");
+  lcd.print(mph);
+  lcd.print("mph");
   
   lcd.setCursor(0,1);
   lcd.print("AccY:");
@@ -110,4 +113,8 @@ double calculateKPH() {
   tickCount = 0;
   currentMillis = millisSinceLastTick;
   return cmps/10000 *360;
+}
+
+double calculateMPH() {
+   return kph * 1.6093;
 }
