@@ -48,12 +48,6 @@ LiquidCrystal lcd(13, 12, 8, 9, 10, 11);
 Adafruit_MMA8451 mma = Adafruit_MMA8451();
 
 void setup() {
-  Serial.begin(115200);
-  
-  Serial.print("Set for wheel circumference: ");
-  Serial.print(WHEEL_CIRCUMFERENCE);
-  Serial.println("cm");
-  
   pinMode(HALL_SENSOR, INPUT_PULLUP);
   attachInterrupt(0,triggerCount, FALLING);
   
@@ -72,7 +66,12 @@ void setup() {
   mma.setRange(MMA8451_RANGE_8_G);
   
   lcd.print("Ready!");
-  delay(1000);
+  lcd.setCursor(0,1);
+  lcd.print("Circ: ");
+  lcd.print(WHEEL_CIRCUMFERENCE);
+  lcd.print("cm");
+
+  delay(2000);
   lcd.clear();
 }
 
