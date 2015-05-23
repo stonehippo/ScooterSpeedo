@@ -1,5 +1,15 @@
 /*
   A wheel encoder speedometer and accelerometer for the tyke's scooter
+
+  https://github.com/stonehippo/ScooterSpeedo
+  
+  Components
+  
+  - Arduino Pro Mini 5v 16mHz
+  - Adafruit MMA8451 3-axis 14-bit acceleroemeter https://www.adafruit.com/products/2019
+  - Hall effect sensor https://www.adafruit.com/product/158
+  - 16x2 LCD character display
+  
 */
 
 #include <LiquidCrystal.h>
@@ -49,7 +59,7 @@ void loop() {
 
   lcd.clear();
 
-  lcd.print("Current Speed");
+  lcd.print("Current Accel.");
   lcd.setCursor(0,1);
   lcd.print("Y:");
   lcd.print(event.acceleration.y);
