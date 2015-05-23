@@ -56,7 +56,10 @@ void setup() {
     while (1);
   }
   mma.setRange(MMA8451_RANGE_8_G);
+  
   lcd.print("Ready!");
+  delay(1000);
+  lcd.clear();
 }
 
 void loop() {
@@ -65,7 +68,7 @@ void loop() {
   /* Get a new sensor event */
   sensors_event_t event;
   mma.getEvent(&event);
-
+  
   lcd.clear();
 
   lcd.print("Revolutions: ");
@@ -76,6 +79,7 @@ void loop() {
   lcd.print("AccY:");
   lcd.print(event.acceleration.y);
   lcd.print(" m/s^2");
+  // using blocking delay debounces the accelerometer and gives the display time to refresh
   delay(250);
 }
 
@@ -84,3 +88,4 @@ void triggerCount() {
   tickCount = tickCount + 1;
   millisSinceLastTick = millis();
 }
+
