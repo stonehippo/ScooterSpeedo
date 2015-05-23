@@ -150,7 +150,7 @@ void triggerCount() {
   millisSinceLastTick = millis();
 }
 
-// ******************* INTERRUPT EVENTS *******************
+// ******************* Speed functions *******************
 
 double calculateKPH() {
   // How many CM per second we've traveled, based on wheel circumference and number of wheel turns since last check
@@ -179,10 +179,17 @@ double kphToMph(double k) {
   return k * 1.6093;
 };
 
+// ******************* Max record functions *******************
+
 void setMaxSpeed(double k) {
   EEPROM.put(MAX_RECORD_KPH_ADDRESS, k); 
 }
 
 void setMaxAccelY(double a) {
   EEPROM.put(MAX_RECORD_ACCEL_Y_ADDRESS, a);  
+}
+
+void resetRecords(() {
+  EEPROM.put(MAX_RECORD_KPH_ADDRESS, 0.0);
+  EEPROM.put(MAX_RECORD_ACCEL_Y_ADDRESS, 0.0);  
 }
