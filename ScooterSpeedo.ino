@@ -17,6 +17,11 @@
 #include <Adafruit_MMA8451.h>
 #include <Adafruit_Sensor.h>
 
+// Hall effect sensor read pin, make it an interrupt pin so we catch all revolutions
+const byte HALL_SENSOR = 2;
+boolean isHallSensorTriggered = false;
+int tickCount = 0;
+int millisSinceLastTick = 0;
 
 // 16x2 LCD display pins
 const byte LCD_BACKLIGHT = 5;
@@ -35,6 +40,10 @@ LiquidCrystal lcd(13, 12, 8, 9, 10, 11);
 Adafruit_MMA8451 mma = Adafruit_MMA8451();
 
 void setup() {
+  pinMode(HALL_SENSOR, INPUT_PULLUP);
+  attachInterrupt(0,triggerCount, FALLING);
+  
+  // Set up the brightness and constrast on the LCD display
   pinMode(LCD_CONTRAST, OUTPUT);
   pinMode(LCD_BACKLIGHT, OUTPUT);
   analogWrite(LCD_BACKLIGHT, 40);
@@ -59,10 +68,19 @@ void loop() {
 
   lcd.clear();
 
-  lcd.print("Current Accel.");
+  lcd.print("Revolutions: ");
+  
+  lcd.print(tickCount); 
+  
   lcd.setCursor(0,1);
-  lcd.print("Y:");
+  lcd.print("AccY:");
   lcd.print(event.acceleration.y);
   lcd.print(" m/s^2");
   delay(250);
+}
+
+// ******************* INTERRUPT EVENTS ******************* 
+void triggerCount() {
+  tickCount = tickCount + 1;
+  millisSinceLastTick = millis();
 }
