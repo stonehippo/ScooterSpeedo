@@ -11,6 +11,9 @@
   - 16x2 LCD character display
   
 */
+#include <Arduino.h>
+
+#include "ScooterSpeedo.h"
 
 #include <math.h>
 #include <EEPROM.h>
